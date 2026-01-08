@@ -2,9 +2,11 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Calendar, User, ArrowRight, Search } from 'lucide-react'
 import { supabase } from '../lib/supabase'
+import { BlogCard } from '../components/cards'
 
 interface BlogPost {
-  id: number
+  id: string | number
+  slug?: string
   title: string
   excerpt: string
   author: string
@@ -25,19 +27,31 @@ const Blog = () => {
   const fetchPosts = async () => {
     try {
       setLoading(true)
-      // Try to fetch from Supabase
+      // Fetch only published posts from Supabase
       const { data, error } = await supabase
         .from('blog_posts')
         .select('*')
-        .order('created_at', { ascending: false })
-        .limit(10)
+        .eq('published', true)
+        .order('published_at', { ascending: false })
+        .limit(20)
 
       if (error) {
         console.log('Supabase not configured, using sample data')
         // Fallback to sample data if Supabase is not configured
         setPosts(samplePosts)
       } else {
-        setPosts((data as BlogPost[]) || samplePosts)
+        // Map database posts to BlogPost interface
+        const mappedPosts = (data || []).map((post: any) => ({
+          id: post.id,
+          slug: post.slug,
+          title: post.title,
+          excerpt: post.excerpt || '',
+          author: post.author || 'eqostack Team',
+          created_at: post.published_at || post.created_at,
+          category: post.category,
+          image: post.image,
+        }))
+        setPosts(mappedPosts.length > 0 ? mappedPosts : samplePosts)
       }
     } catch (error) {
       console.error('Error fetching posts:', error)
@@ -52,16 +66,18 @@ const Blog = () => {
   const samplePosts: BlogPost[] = [
     {
       id: 1,
+      slug: 'the-future-of-tech-in-africa',
       title: 'The Future of Tech in Africa',
       excerpt:
         'Exploring how technology is transforming businesses across the African continent and what the future holds.',
-      author: 'EcoStack Team',
+      author: 'eqostack Team',
       created_at: new Date().toISOString(),
       category: 'Technology',
       image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800',
     },
     {
       id: 2,
+      slug: 'building-scalable-cloud-infrastructure',
       title: 'Building Scalable Cloud Infrastructure',
       excerpt:
         'Best practices for building and managing cloud infrastructure that scales with your business needs.',
@@ -72,6 +88,7 @@ const Blog = () => {
     },
     {
       id: 3,
+      slug: 'mobile-money-revolution-in-africa',
       title: 'Mobile Money Revolution in Africa',
       excerpt:
         'How mobile payment solutions are revolutionizing commerce and financial inclusion across Africa.',
@@ -82,6 +99,7 @@ const Blog = () => {
     },
     {
       id: 4,
+      slug: 'ai-and-machine-learning-opportunities',
       title: 'AI and Machine Learning Opportunities',
       excerpt:
         'Discovering the potential of AI and ML in solving unique challenges faced by African businesses.',
@@ -123,7 +141,7 @@ const Blog = () => {
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-6 sm:mb-8 px-4">
               Stay updated with the latest news, insights, and stories from
-              EcoStack
+              eqostack
             </p>
             {/* Search Bar */}
             <div className="relative max-w-2xl mx-auto px-4">
@@ -155,58 +173,19 @@ const Blog = () => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
               {filteredPosts.map((post, index) => (
-                <motion.article
+                <BlogCard
                   key={post.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                  whileHover={{ y: -5 }}
-                  className="bg-gray-800 rounded-xl shadow-lg hover:shadow-2xl transition-shadow overflow-hidden border border-gray-700"
-                >
-                  <div className="aspect-video bg-gradient-to-br from-primary-400 to-primary-600 relative overflow-hidden">
-                    {post.image ? (
-                      <img
-                        src={post.image}
-                        alt={post.title}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <span className="text-white text-4xl font-bold">
-                          {post.title.charAt(0)}
-                        </span>
-                      </div>
-                    )}
-                    {post.category && (
-                      <span className="absolute top-4 left-4 bg-gray-900 text-primary-400 px-3 py-1 rounded-full text-sm font-semibold">
-                        {post.category}
-                      </span>
-                    )}
-                  </div>
-                  <div className="p-4 sm:p-5 md:p-6">
-                    <div className="flex items-center text-xs sm:text-sm text-gray-400 mb-2 sm:mb-3">
-                      <Calendar size={14} className="mr-2" />
-                      <span>{formatDate(post.created_at)}</span>
-                      <span className="mx-2">•</span>
-                      <User size={14} className="mr-2" />
-                      <span>{post.author}</span>
-                    </div>
-                    <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-2 sm:mb-3">
-                      {post.title}
-                    </h2>
-                    <p className="text-sm sm:text-base text-gray-300 mb-3 sm:mb-4 line-clamp-3">
-                      {post.excerpt}
-                    </p>
-                    <a
-                      href="#"
-                      className="text-primary-400 font-semibold hover:text-primary-300 inline-flex items-center"
-                    >
-                      Read More
-                      <ArrowRight className="ml-2" size={16} />
-                    </a>
-                  </div>
-                </motion.article>
+                  id={post.id}
+                  slug={post.slug}
+                  title={post.title}
+                  excerpt={post.excerpt}
+                  image={post.image}
+                  category={post.category}
+                  author={post.author}
+                  created_at={post.created_at}
+                  index={index}
+                  formatDate={formatDate}
+                />
               ))}
             </div>
           )}

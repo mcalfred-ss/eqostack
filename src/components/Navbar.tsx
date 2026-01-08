@@ -52,7 +52,7 @@ const Navbar = () => {
                   : 'bg-gradient-to-r from-primary-600 to-primary-800 bg-clip-text text-transparent'
               }`}
             >
-              EcoStack
+              eqostack
             </motion.div>
           </Link>
 
@@ -102,7 +102,7 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Navigation */}
+          {/* Mobile Navigation */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -115,20 +115,20 @@ const Navbar = () => {
                 : 'bg-gray-900 border-gray-800'
             }`}
           >
-            <div className="container-custom py-4 space-y-2">
+            <div className="container-custom py-4 space-y-1">
               {navLinks.map((link) => (
                 <Link
                   key={link.path}
                   to={link.path}
                   onClick={() => setIsOpen(false)}
-                  className={`block py-3 px-2 font-medium min-h-[44px] flex items-center ${
+                  className={`block py-3 px-4 font-medium min-h-[44px] flex items-center rounded-lg transition-colors ${
                     isLandingPage
                       ? location.pathname === link.path
-                        ? 'text-white'
-                        : 'text-white/80'
+                        ? 'text-white bg-white/10'
+                        : 'text-white/80 hover:bg-white/5'
                       : location.pathname === link.path
-                      ? 'text-primary-400'
-                      : 'text-gray-300'
+                      ? 'text-primary-400 bg-primary-400/10'
+                      : 'text-gray-300 hover:bg-gray-800'
                   }`}
                 >
                   {link.label}

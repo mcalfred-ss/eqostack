@@ -1,6 +1,15 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Facebook, Twitter, Linkedin, Instagram, Mail, Phone, MapPin, LucideIcon } from 'lucide-react'
+import {
+  Facebook,
+  Twitter,
+  Linkedin,
+  Instagram,
+  Mail,
+  Phone,
+  MapPin,
+  LucideIcon,
+} from 'lucide-react'
 
 interface FooterLink {
   path: string
@@ -22,12 +31,10 @@ interface ContactInfo {
 const Footer = () => {
   const currentYear = new Date().getFullYear()
 
-  // Helper function to check if a link is external
-  const isExternalLink = (path: string): boolean => {
-    return path.startsWith('http://') || path.startsWith('https://')
-  }
+  const isExternalLink = (path: string) =>
+    path.startsWith('http://') || path.startsWith('https://')
 
-  const footerLinks: { company: FooterLink[]; resources: FooterLink[]; legal: FooterLink[] } = {
+  const footerLinks = {
     company: [
       { path: '/about', label: 'About Us' },
       { path: '/products', label: 'Products' },
@@ -56,181 +63,155 @@ const Footer = () => {
   ]
 
   const contactInfo: ContactInfo[] = [
-    {
-      icon: Mail,
-      text: 'hello@eqostack.com',
-      href: 'mailto:hello@eqostack.com',
-    },
-    {
-      icon: Phone,
-      text: '+234 (0) 123 456 7890',
-      href: 'tel:+2341234567890',
-    },
-    {
-      icon: MapPin,
-      text: 'Lagos, Nigeria',
-      href: '#',
-    },
+    { icon: Mail, text: 'eqostack@gmail.com', href: 'mailto:eqostack@gmail.com' },
+    { icon: Phone, text: '+233 0548622418', href: 'tel:+2330548622418' },
+    { icon: MapPin, text: 'Kumasi, Ghana', href: '#' },
   ]
 
   return (
     <footer className="bg-gray-900 text-gray-300 border-t border-gray-800">
-      <div className="container-custom">
-        {/* Main Footer Content */}
-        <div className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12">
-            {/* Brand Section - Takes 2 columns on large screens */}
+      <div className="container-custom px-4 sm:px-6 lg:px-8">
+        {/* MAIN */}
+        <div className="py-12 sm:py-16">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 sm:gap-10">
+            {/* BRAND */}
             <div className="lg:col-span-2">
               <Link to="/" className="inline-block mb-4">
                 <h3 className="text-2xl sm:text-3xl font-bold text-white">
-                  EcoStack
+                  eqostack
                 </h3>
               </Link>
-              <p className="text-sm sm:text-base text-gray-400 mb-6 max-w-md">
-                Building innovative tech solutions for Africa and beyond. 
+
+              <p className="text-sm sm:text-base text-gray-400 max-w-md mb-6">
+                Building innovative tech solutions for Africa and beyond.
                 Empowering businesses with cutting-edge technology.
               </p>
-              
-              {/* Social Links */}
-              <div className="mb-6">
+
+              {/* SOCIAL */}
+              <div className="mb-6 sm:mb-8">
                 <h4 className="text-white font-semibold mb-3 text-sm sm:text-base">
                   Follow Us
                 </h4>
-                <div className="flex space-x-4">
-                  {socialLinks.map((social) => {
-                    const IconComponent = social.icon
-                    return (
-                      <motion.a
-                        key={social.label}
-                        href={social.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        whileHover={{ scale: 1.1, y: -2 }}
-                        whileTap={{ scale: 0.9 }}
-                        className="w-10 h-10 flex items-center justify-center rounded-lg bg-gray-800 text-gray-400 hover:text-primary-400 hover:bg-gray-800/80 transition-all"
-                        aria-label={social.label}
-                      >
-                        <IconComponent size={18} />
-                      </motion.a>
-                    )
-                  })}
+                <div className="flex gap-3">
+                  {socialLinks.map(({ icon: Icon, href, label }) => (
+                    <motion.a
+                      key={label}
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      whileHover={{ scale: 1.1, y: -2 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="w-10 h-10 sm:w-11 sm:h-11 rounded-lg bg-gray-800 flex items-center justify-center
+                        text-gray-400 hover:text-primary-400 transition min-w-[44px] min-h-[44px]"
+                      aria-label={label}
+                    >
+                      <Icon size={18} />
+                    </motion.a>
+                  ))}
                 </div>
               </div>
 
-              {/* Contact Info */}
+              {/* CONTACT */}
               <div className="space-y-3">
-                {contactInfo.map((contact, index) => {
-                  const IconComponent = contact.icon
-                  return (
-                    <a
-                      key={index}
-                      href={contact.href}
-                      className="flex items-center space-x-3 text-sm sm:text-base text-gray-400 hover:text-primary-400 transition-colors group"
-                    >
-                      <IconComponent 
-                        size={18} 
-                        className="text-gray-500 group-hover:text-primary-400 transition-colors" 
-                      />
-                      <span>{contact.text}</span>
-                    </a>
-                  )
-                })}
+                {contactInfo.map(({ icon: Icon, text, href }, i) => (
+                  <a
+                    key={i}
+                    href={href}
+                    className="flex items-start gap-3 text-sm sm:text-base
+                      text-gray-400 hover:text-primary-400 transition min-h-[44px] items-center"
+                  >
+                    <Icon size={18} className="mt-0.5 flex-shrink-0" />
+                    <span className="break-words">{text}</span>
+                  </a>
+                ))}
               </div>
             </div>
 
-            {/* Links Section - Company, Resources, Legal side by side */}
-            <div className="lg:col-span-3 flex flex-col sm:flex-row gap-6 sm:gap-8">
-              {/* Company Links */}
-              <div className="flex-1">
-                <h4 className="text-white font-semibold mb-4 text-base sm:text-lg">
-                  Company
-                </h4>
-                <ul className="space-y-3">
-                  {footerLinks.company.map((link) => (
-                    <li key={link.path}>
-                      <Link
-                        to={link.path}
-                        className="text-sm sm:text-base text-gray-400 hover:text-primary-400 transition-colors inline-block"
-                      >
-                        {link.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Resources Links */}
-              <div className="flex-1">
-                <h4 className="text-white font-semibold mb-4 text-base sm:text-lg">
-                  Resources
-                </h4>
-                <ul className="space-y-3">
-                  {footerLinks.resources.map((link) => (
-                    <li key={link.path}>
-                      {isExternalLink(link.path) ? (
-                        <a
-                          href={link.path}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-sm sm:text-base text-gray-400 hover:text-primary-400 transition-colors inline-block"
-                        >
-                          {link.label}
-                        </a>
-                      ) : (
+            {/* LINKS — RESPONSIVE GRID */}
+            <div className="lg:col-span-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8">
+                {/* COMPANY */}
+                <div>
+                  <h4 className="text-white font-semibold mb-3 sm:mb-4 text-sm sm:text-base">Company</h4>
+                  <ul className="space-y-2 sm:space-y-3">
+                    {footerLinks.company.map((link) => (
+                      <li key={link.path}>
                         <Link
                           to={link.path}
-                          className="text-sm sm:text-base text-gray-400 hover:text-primary-400 transition-colors inline-block"
+                          className="text-sm sm:text-base text-gray-400 hover:text-primary-400 transition block min-h-[32px] flex items-center"
                         >
                           {link.label}
                         </Link>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
 
-              {/* Legal Links */}
-              <div className="flex-1">
-                <h4 className="text-white font-semibold mb-4 text-base sm:text-lg">
-                  Legal
-                </h4>
-                <ul className="space-y-3">
-                  {footerLinks.legal.map((link) => (
-                    <li key={link.path}>
-                      {isExternalLink(link.path) ? (
-                        <a
-                          href={link.path}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-sm sm:text-base text-gray-400 hover:text-primary-400 transition-colors inline-block"
-                        >
-                          {link.label}
-                        </a>
-                      ) : (
-                        <Link
-                          to={link.path}
-                          className="text-sm sm:text-base text-gray-400 hover:text-primary-400 transition-colors inline-block"
-                        >
-                          {link.label}
-                        </Link>
-                      )}
-                    </li>
-                  ))}
-                </ul>
+                {/* RESOURCES */}
+                <div>
+                  <h4 className="text-white font-semibold mb-3 sm:mb-4 text-sm sm:text-base">Resources</h4>
+                  <ul className="space-y-2 sm:space-y-3">
+                    {footerLinks.resources.map((link) => (
+                      <li key={link.path}>
+                        {isExternalLink(link.path) ? (
+                          <a
+                            href={link.path}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-sm sm:text-base text-gray-400 hover:text-primary-400 transition block min-h-[32px] flex items-center"
+                          >
+                            {link.label}
+                          </a>
+                        ) : (
+                          <Link
+                            to={link.path}
+                            className="text-sm sm:text-base text-gray-400 hover:text-primary-400 transition block min-h-[32px] flex items-center"
+                          >
+                            {link.label}
+                          </Link>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* LEGAL */}
+                <div>
+                  <h4 className="text-white font-semibold mb-3 sm:mb-4 text-sm sm:text-base">Legal</h4>
+                  <ul className="space-y-2 sm:space-y-3">
+                    {footerLinks.legal.map((link) => (
+                      <li key={link.path}>
+                        {isExternalLink(link.path) ? (
+                          <a
+                            href={link.path}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-sm sm:text-base text-gray-400 hover:text-primary-400 transition block min-h-[32px] flex items-center"
+                          >
+                            {link.label}
+                          </a>
+                        ) : (
+                          <Link
+                            to={link.path}
+                            className="text-sm sm:text-base text-gray-400 hover:text-primary-400 transition block min-h-[32px] flex items-center"
+                          >
+                            {link.label}
+                          </Link>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="border-t border-gray-800">
-          <div className="py-6 px-4 sm:px-6 lg:px-8">
-            <div className="text-center">
-              <p className="text-xs sm:text-sm text-gray-500">
-                &copy; {currentYear} EcoStack. All rights reserved.
-              </p>
-            </div>
-          </div>
+        {/* BOTTOM */}
+        <div className="border-t border-gray-800 py-6 text-center">
+          <p className="text-xs sm:text-sm text-gray-500">
+            © {currentYear} eqostack. All rights reserved.
+          </p>
         </div>
       </div>
     </footer>

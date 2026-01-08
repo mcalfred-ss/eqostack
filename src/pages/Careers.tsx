@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
+import { PositionCard } from '../components/cards'
 import {
   Briefcase,
   MapPin,
@@ -9,6 +10,9 @@ import {
   Heart,
   Zap,
   Globe,
+  Share2,
+  Lightbulb,
+  Target,
   LucideIcon,
 } from 'lucide-react'
 
@@ -31,7 +35,7 @@ const Careers = () => {
     {
       title: 'Senior Full Stack Developer',
       department: 'Engineering',
-      location: 'Lagos, Nigeria / Remote',
+      location: 'Kumasi, Ghana / Remote',
       type: 'Full-time',
       description:
         'We are looking for an experienced full-stack developer to join our engineering team.',
@@ -47,7 +51,7 @@ const Careers = () => {
     {
       title: 'DevOps Engineer',
       department: 'Engineering',
-      location: 'Lagos, Nigeria',
+      location: 'Kumasi, Ghana',
       type: 'Full-time',
       description:
         'Help us build and maintain scalable infrastructure for our products.',
@@ -63,7 +67,7 @@ const Careers = () => {
     {
       title: 'Customer Success Manager',
       department: 'Operations',
-      location: 'Lagos, Nigeria',
+      location: 'Kumasi, Ghana',
       type: 'Full-time',
       description:
         'Ensure our customers get the most value from our products and services.',
@@ -80,24 +84,24 @@ const Careers = () => {
 
   const benefits: Benefit[] = [
     {
-      icon: Zap,
-      title: 'Competitive Salary',
-      description: 'We offer competitive compensation packages',
-    },
-    {
-      icon: Globe,
-      title: 'Remote Work',
-      description: 'Work from anywhere in Africa',
-    },
-    {
-      icon: Heart,
-      title: 'Health Insurance',
-      description: 'Comprehensive health coverage',
-    },
-    {
       icon: Users,
-      title: 'Team Culture',
-      description: 'Collaborative and supportive environment',
+      title: 'Collaborative Team',
+      description: 'Work alongside passionate people building solutions together',
+    },
+    {
+      icon: Share2,
+      title: 'Shared Mission',
+      description: 'Join a team united by the vision to change Africa through tech',
+    },
+    {
+      icon: Lightbulb,
+      title: 'Learn Together',
+      description: 'Grow your skills while contributing to meaningful projects',
+    },
+    {
+      icon: Target,
+      title: 'Impact-Driven',
+      description: 'Every team member plays a crucial role in transforming Africa',
     },
   ]
 
@@ -112,7 +116,7 @@ const Careers = () => {
             className="text-center max-w-3xl mx-auto"
           >
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6 px-4">
-              Join the <span className="text-primary-400">EcoStack Team</span>
+              Join the <span className="text-primary-400">eqostack Team</span>
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-6 sm:mb-8 px-4">
               Be part of a team that&apos;s building the future of technology in
@@ -140,10 +144,11 @@ const Careers = () => {
             className="text-center mb-16"
           >
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-3 sm:mb-4 px-4">
-              Why Work at EcoStack?
+              Why Work at eqostack?
             </h2>
             <p className="text-base sm:text-lg md:text-xl text-gray-300 px-4">
-              We&apos;re building something special, and we want you to be part of it
+              Join a tight-knit team where collaboration, learning, and shared purpose 
+              drive everything we do. Together, we&apos;re changing how Africa sees technology.
             </p>
           </motion.div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
@@ -190,45 +195,15 @@ const Careers = () => {
           </motion.div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             {openPositions.map((position, index) => (
-              <motion.div
+              <PositionCard
                 key={position.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ y: -5 }}
-                className="bg-gray-800 p-4 sm:p-5 md:p-6 rounded-xl shadow-lg hover:shadow-2xl transition-shadow border border-gray-700"
-              >
-                <div className="flex items-start justify-between mb-3 sm:mb-4">
-                  <div className="flex-1">
-                    <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-2">
-                      {position.title}
-                    </h3>
-                    <span className="inline-block bg-primary-600/20 text-primary-400 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-semibold">
-                      {position.department}
-                    </span>
-                  </div>
-                  <Briefcase className="text-primary-400 flex-shrink-0 ml-2" size={20} />
-                </div>
-                <p className="text-sm sm:text-base text-gray-300 mb-3 sm:mb-4">{position.description}</p>
-                <div className="flex flex-wrap items-center gap-4 text-sm text-gray-400 mb-4">
-                  <div className="flex items-center">
-                    <MapPin size={16} className="mr-1" />
-                    {position.location}
-                  </div>
-                  <div className="flex items-center">
-                    <Clock size={16} className="mr-1" />
-                    {position.type}
-                  </div>
-                </div>
-                <Link
-                  to="/contact"
-                  className="text-primary-400 font-semibold hover:text-primary-300 inline-flex items-center"
-                >
-                  Apply Now
-                  <ArrowRight className="ml-2" size={16} />
-                </Link>
-              </motion.div>
+                title={position.title}
+                department={position.department}
+                description={position.description}
+                location={position.location}
+                type={position.type}
+                index={index}
+              />
             ))}
           </div>
         </div>

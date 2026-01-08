@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { Target, Users, Award, Heart, MapPin, Lightbulb, LucideIcon } from 'lucide-react'
+import { ValueCard, TeamCard } from '../components/cards'
 
 interface Value {
   icon: LucideIcon
@@ -16,46 +17,46 @@ const About = () => {
   const values: Value[] = [
     {
       icon: Target,
-      title: 'Mission-Driven',
+      title: 'Change Through Tech',
       description:
-        "We're committed to empowering African businesses through innovative technology solutions.",
+        "We believe technology can fundamentally change how we see and solve challenges in Africa.",
     },
     {
       icon: Users,
       title: 'Community First',
       description:
-        'Building with and for our community, ensuring our solutions meet real needs.',
+        'Building with communities, not just for them. Every solution starts with understanding real needs.',
     },
     {
       icon: Award,
-      title: 'Excellence',
+      title: 'Purposeful Innovation',
       description:
-        'We strive for excellence in everything we do, from code quality to customer service.',
+        'Every line of code, every feature, every product serves a meaningful purpose in transforming Africa.',
     },
     {
       icon: Heart,
-      title: 'Impact',
+      title: 'Perspective Shift',
       description:
-        'Focused on creating positive impact that transforms businesses and communities.',
+        "We're not just building tools—we're changing how Africa sees technology and its potential.",
     },
   ]
 
   const team: TeamMember[] = [
     {
-      name: 'Leadership Team',
-      description: 'Experienced professionals from across Africa and the globe',
+      name: 'Founders',
+      description: 'Visionaries committed to changing Africa through technology',
     },
     {
       name: 'Engineering',
-      description: 'Talented developers building cutting-edge solutions',
+      description: 'Builders creating purposeful solutions for African challenges',
     },
     {
       name: 'Product & Design',
-      description: 'Creative minds crafting beautiful and intuitive experiences',
+      description: 'Creators designing experiences that shift perspectives',
     },
     {
-      name: 'Operations',
-      description: 'Dedicated team ensuring smooth operations and support',
+      name: 'Community',
+      description: 'Advocates connecting with communities across Africa',
     },
   ]
 
@@ -70,11 +71,12 @@ const About = () => {
             className="text-center max-w-3xl mx-auto"
           >
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6 px-4">
-              About <span className="text-primary-400">EcoStack</span>
+              About <span className="text-primary-400">eqostack</span>
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-gray-300 px-4">
-              We&apos;re a technology company from Africa, building innovative
-              solutions that drive digital transformation across the continent.
+              We&apos;re a startup that believes technology can fundamentally change 
+              how we see and solve challenges in Africa. We&apos;re building solutions 
+              that transform perspectives and empower communities.
             </p>
           </motion.div>
         </div>
@@ -94,19 +96,21 @@ const About = () => {
               </h2>
               <div className="space-y-3 sm:space-y-4 text-gray-300 text-base sm:text-lg">
                 <p>
-                  EcoStack was founded with a vision to bridge the technology
-                  gap in Africa and empower businesses with world-class digital
-                  solutions. We believe that African businesses deserve access to
-                  the same cutting-edge technology that drives innovation globally.
+                  eqostack was born from a simple belief: technology can change how 
+                  we see things in Africa. We&apos;re not just building software—we&apos;re 
+                  creating tools that shift perspectives, solve real problems, and 
+                  empower communities across the continent.
                 </p>
                 <p>
-                  Since our inception, we&apos;ve been committed to building products
-                  that are not just technologically advanced, but also tailored
-                  to the unique needs and challenges of the African market.
+                  As a startup, we&apos;re focused on building purposeful digital systems 
+                  that address the unique challenges and opportunities in Africa. Every 
+                  solution we create is designed with the African context in mind, 
+                  understanding that technology must be both powerful and purposeful.
                 </p>
                 <p>
-                  Today, we serve thousands of businesses across the continent,
-                  helping them scale, innovate, and compete on a global stage.
+                  We&apos;re at the beginning of our journey, but our vision is clear: 
+                  to use technology as a catalyst for change, transforming how Africa 
+                  approaches innovation, problem-solving, and digital transformation.
                 </p>
               </div>
             </motion.div>
@@ -116,27 +120,27 @@ const About = () => {
               viewport={{ once: true }}
               className="relative"
             >
-              <div className="bg-gradient-to-br from-primary-400 to-primary-600 rounded-2xl p-12 text-white">
-                <div className="space-y-6">
-                  <div className="flex items-center space-x-4">
-                    <MapPin size={32} />
+              <div className="bg-gradient-to-br from-primary-400 to-primary-600 rounded-2xl p-6 sm:p-8 md:p-12 text-white">
+                <div className="space-y-4 sm:space-y-6">
+                  <div className="flex items-center space-x-3 sm:space-x-4">
+                    <MapPin size={24} className="sm:w-8 sm:h-8 flex-shrink-0" />
                     <div>
-                      <div className="text-2xl font-bold">50+ Countries</div>
-                      <div className="text-primary-100">Across Africa</div>
+                      <div className="text-xl sm:text-2xl font-bold">Africa-Focused</div>
+                      <div className="text-sm sm:text-base text-primary-100">Building for the continent</div>
                     </div>
                   </div>
-                  <div className="flex items-center space-x-4">
-                    <Users size={32} />
+                  <div className="flex items-center space-x-3 sm:space-x-4">
+                    <Users size={24} className="sm:w-8 sm:h-8 flex-shrink-0" />
                     <div>
-                      <div className="text-2xl font-bold">100+ Team Members</div>
-                      <div className="text-primary-100">Diverse & Talented</div>
+                      <div className="text-xl sm:text-2xl font-bold">Small Team</div>
+                      <div className="text-sm sm:text-base text-primary-100">Big vision, growing team</div>
                     </div>
                   </div>
-                  <div className="flex items-center space-x-4">
-                    <Lightbulb size={32} />
+                  <div className="flex items-center space-x-3 sm:space-x-4">
+                    <Lightbulb size={24} className="sm:w-8 sm:h-8 flex-shrink-0" />
                     <div>
-                      <div className="text-2xl font-bold">Innovation First</div>
-                      <div className="text-primary-100">Always Learning</div>
+                      <div className="text-xl sm:text-2xl font-bold">Tech for Change</div>
+                      <div className="text-sm sm:text-base text-primary-100">Transforming perspectives</div>
                     </div>
                   </div>
                 </div>
@@ -163,27 +167,15 @@ const About = () => {
             </p>
           </motion.div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
-            {values.map((value, index) => {
-              const IconComponent = value.icon
-              return (
-                <motion.div
-                  key={value.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                  className="bg-gray-800 p-4 sm:p-5 md:p-6 rounded-xl shadow-lg text-center border border-gray-700"
-                >
-                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-primary-600/20 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
-                    <IconComponent className="text-primary-400" size={24} />
-                  </div>
-                  <h3 className="text-lg sm:text-xl font-bold text-white mb-2 sm:mb-3">
-                    {value.title}
-                  </h3>
-                  <p className="text-sm sm:text-base text-gray-300">{value.description}</p>
-                </motion.div>
-              )
-            })}
+            {values.map((value, index) => (
+              <ValueCard
+                key={value.title}
+                icon={value.icon}
+                title={value.title}
+                description={value.description}
+                index={index}
+              />
+            ))}
           </div>
         </div>
       </section>
@@ -199,27 +191,17 @@ const About = () => {
           >
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-3 sm:mb-4 px-4">Our Team</h2>
             <p className="text-base sm:text-lg md:text-xl text-gray-300 px-4">
-              A diverse group of talented individuals united by a common vision
+              A small but passionate team united by the belief that tech can change Africa
             </p>
           </motion.div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
             {team.map((member, index) => (
-              <motion.div
+              <TeamCard
                 key={member.name}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="bg-gray-800 p-4 sm:p-5 md:p-6 rounded-xl text-center border border-gray-700"
-              >
-                <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-primary-400 to-primary-600 rounded-full mx-auto mb-3 sm:mb-4 flex items-center justify-center">
-                  <Users className="text-white" size={32} />
-                </div>
-                <h3 className="text-lg sm:text-xl font-bold text-white mb-2">
-                  {member.name}
-                </h3>
-                <p className="text-sm sm:text-base text-gray-300">{member.description}</p>
-              </motion.div>
+                name={member.name}
+                description={member.description}
+                index={index}
+              />
             ))}
           </div>
         </div>

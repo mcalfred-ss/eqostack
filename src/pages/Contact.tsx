@@ -39,20 +39,21 @@ const Contact = () => {
     setLoading(true)
 
     try {
-      // Try to save to Supabase
+      // Save to Supabase
       const { error } = await supabase.from('contact_submissions').insert([
         {
           name: formData.name,
           email: formData.email,
           subject: formData.subject,
           message: formData.message,
-          created_at: new Date().toISOString(),
+          status: 'new',
         },
       ])
 
       if (error) {
-        console.log('Supabase not configured, form data:', formData)
-        // In a real app, you might want to send this to an API endpoint
+        console.error('Error submitting form:', error)
+        alert('Failed to submit form. Please try again.')
+        return
       }
 
       setSubmitted(true)
@@ -62,6 +63,7 @@ const Contact = () => {
       setTimeout(() => setSubmitted(false), 5000)
     } catch (error) {
       console.error('Error submitting form:', error)
+      alert('An error occurred. Please try again.')
     } finally {
       setLoading(false)
     }
@@ -71,19 +73,19 @@ const Contact = () => {
     {
       icon: Mail,
       title: 'Email',
-      content: 'hello@eqostack.com',
-      link: 'mailto:hello@eqostack.com',
+      content: 'eqostack@gmail.com',
+      link: 'mailto:eqostack@gmail.com',
     },
     {
       icon: Phone,
       title: 'Phone',
-      content: '+234 (0) 123 456 7890',
-      link: 'tel:+2341234567890',
+      content: '+233 0548622418',
+      link: 'tel:+2330548622418',
     },
     {
       icon: MapPin,
       title: 'Address',
-      content: 'Lagos, Nigeria',
+      content: 'Kumasi, Ghana',
       link: '#',
     },
   ]
@@ -114,14 +116,14 @@ const Contact = () => {
         <div className="container-custom">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 md:gap-12">
             {/* Contact Info */}
-            <div className="lg:col-span-1">
+            <div className="lg:col-span-1 order-2 lg:order-1">
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 className="space-y-4 sm:space-y-6"
               >
-                <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6 sm:mb-8">
+                <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-4 sm:mb-6 md:mb-8">
                   Contact Information
                 </h2>
                 {contactInfo.map((info, index) => {
@@ -138,13 +140,13 @@ const Contact = () => {
                       className="flex items-start space-x-3 sm:space-x-4 p-3 sm:p-4 rounded-lg hover:bg-gray-800 transition-colors min-h-[44px]"
                     >
                       <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary-600/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <IconComponent className="text-primary-400" size={20} />
+                        <IconComponent className="text-primary-400" size={18} />
                       </div>
-                      <div>
+                      <div className="min-w-0 flex-1">
                         <h3 className="font-semibold text-white mb-1 text-sm sm:text-base">
                           {info.title}
                         </h3>
-                        <p className="text-gray-300 text-sm sm:text-base">{info.content}</p>
+                        <p className="text-gray-300 text-sm sm:text-base break-words">{info.content}</p>
                       </div>
                     </motion.a>
                   )
@@ -153,7 +155,7 @@ const Contact = () => {
             </div>
 
             {/* Contact Form */}
-            <div className="lg:col-span-2">
+            <div className="lg:col-span-2 order-1 lg:order-2">
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 whileInView={{ opacity: 1, x: 0 }}

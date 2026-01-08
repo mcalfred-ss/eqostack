@@ -1,6 +1,6 @@
-# EcoStack Website
+# eqostack Website
 
-A modern, responsive website for EcoStack - a tech company from Africa, built with Vite + React, Tailwind CSS, Framer Motion, and Supabase.
+A modern, responsive website for eqostack - a tech company from Africa, built with Vite + React, Tailwind CSS, Framer Motion, and Supabase.
 
 ## Features
 
