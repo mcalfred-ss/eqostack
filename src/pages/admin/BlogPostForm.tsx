@@ -303,6 +303,9 @@ const BlogPostForm = () => {
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
                 Featured Image
+                <span className="text-xs text-gray-500 ml-2">
+                  (Recommended: 1920×1080px, 16:9 ratio, max 5MB)
+                </span>
               </label>
               
               {/* Image Preview */}

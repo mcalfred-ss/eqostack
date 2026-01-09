@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { ArrowRight, Zap, Globe, Shield, Users, LucideIcon } from 'lucide-react'
 import { FeatureCard } from '../components/cards'
+import BlogCarousel from '../components/BlogCarousel'
 
 interface Feature {
   icon: LucideIcon
@@ -210,6 +211,9 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+      {/* ================= BLOG CAROUSEL ================= */}
+      <BlogCarousel />
 
       {/* ================= CTA ================= */}
       <section className="section-padding bg-gradient-to-r from-primary-600 to-primary-800">

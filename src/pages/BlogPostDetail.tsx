@@ -117,13 +117,17 @@ const BlogPostDetail = () => {
     <div className="min-h-screen bg-gray-900">
       {/* Hero Image */}
       {post.image && (
-        <div className="relative h-64 sm:h-80 md:h-96 overflow-hidden">
-          <img
-            src={post.image}
-            alt={post.title}
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/50 to-transparent" />
+        <div className="relative w-full overflow-hidden bg-gray-800">
+          <div className="aspect-video sm:aspect-[21/9] md:aspect-[16/6] w-full">
+            <img
+              src={post.image}
+              alt={post.title}
+              className="w-full h-full object-cover object-center"
+              style={{ objectFit: 'cover', objectPosition: 'center' }}
+              loading="eager"
+            />
+          </div>
+          <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/30 to-transparent pointer-events-none" />
         </div>
       )}
 
@@ -199,11 +203,17 @@ const BlogPostDetail = () => {
             prose-blockquote:text-gray-300
             prose-img:rounded-lg
             prose-img:border
-            prose-img:border-gray-700"
+            prose-img:border-gray-700
+            prose-img:w-full
+            prose-img:h-auto
+            prose-img:max-w-full
+            prose-img:object-contain"
         >
-          <div className="whitespace-pre-wrap text-gray-300 leading-relaxed text-base sm:text-lg">
-            {post.content}
-          </div>
+          <div 
+            className="text-gray-300 leading-relaxed text-base sm:text-lg
+              [&_img]:w-full [&_img]:h-auto [&_img]:max-w-full [&_img]:object-contain [&_img]:rounded-lg [&_img]:my-4 [&_img]:border [&_img]:border-gray-700"
+            dangerouslySetInnerHTML={{ __html: post.content }}
+          />
         </motion.div>
 
         {/* Footer */}

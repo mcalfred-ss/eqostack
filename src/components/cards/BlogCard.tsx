@@ -40,7 +40,13 @@ const BlogCard = ({
     >
       <div className="aspect-video bg-gradient-to-br from-primary-400 to-primary-600 relative overflow-hidden flex-shrink-0">
         {image ? (
-          <img src={image} alt={title} className="w-full h-full object-cover" />
+          <img 
+            src={image} 
+            alt={title} 
+            className="w-full h-full object-cover object-center"
+            style={{ objectFit: 'cover', objectPosition: 'center' }}
+            loading="lazy"
+          />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
             <span className="text-white text-3xl sm:text-4xl font-bold">{title.charAt(0)}</span>
