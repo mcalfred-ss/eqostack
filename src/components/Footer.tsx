@@ -81,7 +81,12 @@ const Footer = () => {
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 sm:gap-10">
             {/* BRAND */}
             <div className="lg:col-span-2">
-              <Link to="/" className="inline-block mb-4">
+              <Link to="/" className="inline-flex items-center space-x-3 mb-4">
+                <img
+                  src="/eqostack logo.png"
+                  alt="eqostack logo"
+                  className="h-10 sm:h-12 w-auto"
+                />
                 <h3 className="text-2xl sm:text-3xl font-bold text-white">
                   eqostack
                 </h3>
