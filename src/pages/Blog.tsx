@@ -44,8 +44,7 @@ const Blog = () => {
         .from('blog_posts')
         .select('id, slug, title, excerpt, author, category, image, published_at, created_at')
         .eq('published', true)
-        .order('published_at', { ascending: false })
-        .order('created_at', { ascending: false })
+        .order('published_at', { ascending: false, nullsFirst: false })
         .limit(50)
 
       if (error) {
