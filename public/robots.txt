@@ -1,0 +1,12 @@
+# robots.txt for eqostack.com
+# This file tells search engines which pages they can crawl
+
+User-agent: *
+Allow: /
+
+# Disallow admin pages from being indexed
+Disallow: /admin/
+Disallow: /admin/login
+
+# Sitemap location
+Sitemap: https://eqostack.com/sitemap.xml
