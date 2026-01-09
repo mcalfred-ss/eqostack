@@ -33,6 +33,18 @@ const BlogPostDetail = () => {
   const fetchPost = async () => {
     try {
       setLoading(true)
+      setError(null)
+
+      // Check if Supabase is configured
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+      const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+      
+      if (!supabaseUrl || !supabaseKey || supabaseUrl.includes('your-project') || supabaseKey.includes('your-anon-key')) {
+        setError('Database not configured')
+        setLoading(false)
+        return
+      }
+
       const { data, error } = await supabase
         .from('blog_posts')
         .select('*')
@@ -41,18 +53,23 @@ const BlogPostDetail = () => {
         .single()
 
       if (error) {
-        // If not found in database, try sample data
-        console.log('Post not found in database')
-        setError('Post not found')
+        console.error('Error fetching post:', error)
+        if (error.code === 'PGRST116') {
+          setError('Post not found')
+        } else {
+          setError('Failed to load post. Please try again later.')
+        }
         return
       }
 
       if (data) {
         setPost(data as BlogPost)
+      } else {
+        setError('Post not found')
       }
     } catch (err) {
       console.error('Error fetching post:', err)
-      setError('Failed to load post')
+      setError('Failed to load post. Please try again later.')
     } finally {
       setLoading(false)
     }

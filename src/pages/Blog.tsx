@@ -27,23 +27,39 @@ const Blog = () => {
   const fetchPosts = async () => {
     try {
       setLoading(true)
+      
+      // Check if Supabase is configured
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+      const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+      
+      if (!supabaseUrl || !supabaseKey || supabaseUrl.includes('your-project') || supabaseKey.includes('your-anon-key')) {
+        console.warn('Supabase not configured. Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in .env')
+        setPosts([])
+        setLoading(false)
+        return
+      }
+
       // Fetch only published posts from Supabase
       const { data, error } = await supabase
         .from('blog_posts')
-        .select('*')
+        .select('id, slug, title, excerpt, author, category, image, published_at, created_at')
         .eq('published', true)
         .order('published_at', { ascending: false })
-        .limit(20)
+        .order('created_at', { ascending: false })
+        .limit(50)
 
       if (error) {
-        console.log('Supabase not configured, using sample data')
-        // Fallback to sample data if Supabase is not configured
-        setPosts(samplePosts)
-      } else {
+        console.error('Error fetching posts from database:', error)
+        // Only show error in console, don't fallback to sample data
+        setPosts([])
+        return
+      }
+
+      if (data && data.length > 0) {
         // Map database posts to BlogPost interface
-        const mappedPosts = (data || []).map((post: any) => ({
+        const mappedPosts = data.map((post: any) => ({
           id: post.id,
-          slug: post.slug,
+          slug: post.slug || generateSlugFromTitle(post.title),
           title: post.title,
           excerpt: post.excerpt || '',
           author: post.author || 'eqostack Team',
@@ -51,64 +67,27 @@ const Blog = () => {
           category: post.category,
           image: post.image,
         }))
-        setPosts(mappedPosts.length > 0 ? mappedPosts : samplePosts)
+        setPosts(mappedPosts)
+      } else {
+        // No posts found in database
+        setPosts([])
       }
     } catch (error) {
       console.error('Error fetching posts:', error)
-      // Fallback to sample data
-      setPosts(samplePosts)
+      setPosts([])
     } finally {
       setLoading(false)
     }
   }
 
-  // Sample posts for when Supabase is not configured
-  const samplePosts: BlogPost[] = [
-    {
-      id: 1,
-      slug: 'the-future-of-tech-in-africa',
-      title: 'The Future of Tech in Africa',
-      excerpt:
-        'Exploring how technology is transforming businesses across the African continent and what the future holds.',
-      author: 'eqostack Team',
-      created_at: new Date().toISOString(),
-      category: 'Technology',
-      image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800',
-    },
-    {
-      id: 2,
-      slug: 'building-scalable-cloud-infrastructure',
-      title: 'Building Scalable Cloud Infrastructure',
-      excerpt:
-        'Best practices for building and managing cloud infrastructure that scales with your business needs.',
-      author: 'Engineering Team',
-      created_at: new Date(Date.now() - 86400000).toISOString(),
-      category: 'Engineering',
-      image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800',
-    },
-    {
-      id: 3,
-      slug: 'mobile-money-revolution-in-africa',
-      title: 'Mobile Money Revolution in Africa',
-      excerpt:
-        'How mobile payment solutions are revolutionizing commerce and financial inclusion across Africa.',
-      author: 'Product Team',
-      created_at: new Date(Date.now() - 172800000).toISOString(),
-      category: 'Finance',
-      image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800',
-    },
-    {
-      id: 4,
-      slug: 'ai-and-machine-learning-opportunities',
-      title: 'AI and Machine Learning Opportunities',
-      excerpt:
-        'Discovering the potential of AI and ML in solving unique challenges faced by African businesses.',
-      author: 'Data Science Team',
-      created_at: new Date(Date.now() - 259200000).toISOString(),
-      category: 'AI/ML',
-      image: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=800',
-    },
-  ]
+  // Helper function to generate slug from title if missing
+  const generateSlugFromTitle = (title: string): string => {
+    return title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '')
+  }
+
 
   const filteredPosts = posts.filter(
     (post) =>
@@ -168,7 +147,14 @@ const Blog = () => {
             </div>
           ) : filteredPosts.length === 0 ? (
             <div className="text-center py-20">
-              <p className="text-xl text-gray-300">No posts found.</p>
+              <p className="text-xl text-gray-300 mb-4">
+                {searchTerm ? 'No posts match your search.' : 'No blog posts yet.'}
+              </p>
+              {!searchTerm && (
+                <p className="text-gray-400">
+                  Check back soon for updates and insights from eqostack.
+                </p>
+              )}
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
