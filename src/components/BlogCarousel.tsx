@@ -10,6 +10,8 @@ interface BlogPost {
   slug: string
   excerpt?: string
   image?: string
+  image_position?: string
+  image_fit?: string
   category?: string
   created_at: string
   published_at?: string
@@ -39,7 +41,7 @@ const BlogCarousel = () => {
 
       const { data, error } = await supabase
         .from('blog_posts')
-        .select('id, slug, title, excerpt, image, category, published_at, created_at')
+        .select('id, slug, title, excerpt, image, image_position, image_fit, category, published_at, created_at')
         .eq('published', true)
         .order('published_at', { ascending: false })
         .order('created_at', { ascending: false })
@@ -150,7 +152,11 @@ const BlogCarousel = () => {
                         <img
                           src={posts[currentIndex].image}
                           alt={posts[currentIndex].title}
-                          className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
+                          className="w-full h-full transition-transform duration-700 group-hover:scale-105"
+                          style={{ 
+                            objectFit: (posts[currentIndex].image_fit as any) || 'cover', 
+                            objectPosition: posts[currentIndex].image_position || 'center' 
+                          }}
                         />
                       ) : (
                         <div className="w-full h-full bg-gradient-to-br from-primary-600 to-primary-800 flex items-center justify-center">

@@ -8,6 +8,8 @@ interface BlogCardProps {
   title: string
   excerpt: string
   image?: string
+  image_position?: string
+  image_fit?: string
   category?: string
   author: string
   created_at: string
@@ -21,6 +23,8 @@ const BlogCard = ({
   title,
   excerpt,
   image,
+  image_position = 'center',
+  image_fit = 'cover',
   category,
   author,
   created_at,
@@ -43,8 +47,11 @@ const BlogCard = ({
           <img 
             src={image} 
             alt={title} 
-            className="w-full h-full object-cover object-center"
-            style={{ objectFit: 'cover', objectPosition: 'center' }}
+            className="w-full h-full"
+            style={{ 
+              objectFit: (image_fit as any) || 'cover', 
+              objectPosition: image_position || 'center' 
+            }}
             loading="lazy"
           />
         ) : (

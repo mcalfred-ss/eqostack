@@ -15,6 +15,8 @@ interface BlogPost {
   published_at?: string
   category?: string
   image?: string
+  image_position?: string
+  image_fit?: string
 }
 
 const BlogPostDetail = () => {
@@ -122,8 +124,11 @@ const BlogPostDetail = () => {
             <img
               src={post.image}
               alt={post.title}
-              className="w-full h-full object-cover object-center"
-              style={{ objectFit: 'cover', objectPosition: 'center' }}
+              className="w-full h-full"
+              style={{ 
+                objectFit: (post.image_fit as any) || 'cover', 
+                objectPosition: post.image_position || 'center' 
+              }}
               loading="eager"
             />
           </div>

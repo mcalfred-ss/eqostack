@@ -17,6 +17,8 @@ const BlogPostForm = () => {
     author: 'eqostack Team',
     category: '',
     image: '',
+    image_position: 'center',
+    image_fit: 'cover',
     published: false,
     featured: false,
   })
@@ -25,6 +27,9 @@ const BlogPostForm = () => {
   const [uploading, setUploading] = useState(false)
   const [uploadProgress, setUploadProgress] = useState(0)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
+  const [isDragging, setIsDragging] = useState(false)
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 })
+  const previewContainerRef = useRef<HTMLDivElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -51,6 +56,8 @@ const BlogPostForm = () => {
           author: data.author || 'eqostack Team',
           category: data.category || '',
           image: data.image || '',
+          image_position: data.image_position || 'center',
+          image_fit: data.image_fit || 'cover',
           published: data.published || false,
           featured: data.featured || false,
         })
@@ -144,6 +151,89 @@ const BlogPostForm = () => {
       setTimeout(() => setUploadProgress(0), 1000)
     }
   }
+
+  const handleDragStart = (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    setIsDragging(true)
+    const rect = previewContainerRef.current?.getBoundingClientRect()
+    if (!rect) return
+
+    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX
+    const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY
+
+    setDragStart({
+      x: clientX - rect.left,
+      y: clientY - rect.top,
+    })
+
+    // Update position immediately on click
+    const xPercent = Math.max(0, Math.min(100, ((clientX - rect.left) / rect.width) * 100))
+    const yPercent = Math.max(0, Math.min(100, ((clientY - rect.top) / rect.height) * 100))
+    
+    setFormData({
+      ...formData,
+      image_position: `${xPercent.toFixed(1)}% ${yPercent.toFixed(1)}%`,
+    })
+  }
+
+  const handleDrag = (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
+    if (!isDragging || !previewContainerRef.current) return
+
+    e.preventDefault()
+    const rect = previewContainerRef.current.getBoundingClientRect()
+    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX
+    const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY
+
+    const x = clientX - rect.left
+    const y = clientY - rect.top
+
+    // Convert to percentage
+    const xPercent = Math.max(0, Math.min(100, (x / rect.width) * 100))
+    const yPercent = Math.max(0, Math.min(100, (y / rect.height) * 100))
+
+    // Update position
+    setFormData({
+      ...formData,
+      image_position: `${xPercent.toFixed(1)}% ${yPercent.toFixed(1)}%`,
+    })
+  }
+
+  const handleDragEnd = () => {
+    setIsDragging(false)
+  }
+
+  // Global mouse move handler for better dragging
+  useEffect(() => {
+    if (!isDragging) return
+
+    const handleGlobalMouseMove = (e: MouseEvent) => {
+      if (!previewContainerRef.current) return
+      
+      const rect = previewContainerRef.current.getBoundingClientRect()
+      const x = e.clientX - rect.left
+      const y = e.clientY - rect.top
+
+      const xPercent = Math.max(0, Math.min(100, (x / rect.width) * 100))
+      const yPercent = Math.max(0, Math.min(100, (y / rect.height) * 100))
+
+      setFormData((prev) => ({
+        ...prev,
+        image_position: `${xPercent.toFixed(1)}% ${yPercent.toFixed(1)}%`,
+      }))
+    }
+
+    const handleGlobalMouseUp = () => {
+      setIsDragging(false)
+    }
+
+    window.addEventListener('mousemove', handleGlobalMouseMove)
+    window.addEventListener('mouseup', handleGlobalMouseUp)
+
+    return () => {
+      window.removeEventListener('mousemove', handleGlobalMouseMove)
+      window.removeEventListener('mouseup', handleGlobalMouseUp)
+    }
+  }, [isDragging])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -308,25 +398,63 @@ const BlogPostForm = () => {
                 </span>
               </label>
               
-              {/* Image Preview */}
+              {/* Image Preview with Drag Positioning */}
               {imagePreview && (
                 <div className="mb-4 relative">
-                  <img
-                    src={imagePreview}
-                    alt="Preview"
-                    className="w-full h-64 object-cover rounded-lg border border-gray-700"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setImagePreview(null)
-                      setFormData({ ...formData, image: '' })
-                      if (fileInputRef.current) fileInputRef.current.value = ''
-                    }}
-                    className="absolute top-2 right-2 p-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors"
+                  <div className="mb-2 flex items-center justify-between">
+                    <label className="text-sm font-medium text-gray-300">
+                      Drag image to position it
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setFormData({ ...formData, image_position: 'center' })
+                      }}
+                      className="text-xs text-primary-400 hover:text-primary-300"
+                    >
+                      Reset Position
+                    </button>
+                  </div>
+                  <div
+                    ref={previewContainerRef}
+                    className="relative w-full h-64 overflow-hidden rounded-lg border-2 border-gray-700 bg-gray-800 cursor-move"
+                    onMouseDown={handleDragStart}
+                    onMouseMove={handleDrag}
+                    onMouseUp={handleDragEnd}
+                    onMouseLeave={handleDragEnd}
+                    onTouchStart={handleDragStart}
+                    onTouchMove={handleDrag}
+                    onTouchEnd={handleDragEnd}
                   >
-                    <X size={16} />
-                  </button>
+                    <img
+                      src={imagePreview}
+                      alt="Preview"
+                      className="w-full h-full select-none pointer-events-none"
+                      draggable={false}
+                      style={{
+                        objectFit: formData.image_fit as any,
+                        objectPosition: formData.image_position,
+                        transition: isDragging ? 'none' : 'object-position 0.1s ease-out',
+                      }}
+                    />
+                    {isDragging && (
+                      <div className="absolute inset-0 border-2 border-primary-500 border-dashed pointer-events-none" />
+                    )}
+                  </div>
+                  <div className="mt-2 flex items-center justify-between text-xs text-gray-400">
+                    <span>Position: {formData.image_position}</span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setImagePreview(null)
+                        setFormData({ ...formData, image: '', image_position: 'center', image_fit: 'cover' })
+                        if (fileInputRef.current) fileInputRef.current.value = ''
+                      }}
+                      className="text-red-400 hover:text-red-300"
+                    >
+                      Remove Image
+                    </button>
+                  </div>
                 </div>
               )}
 
@@ -383,6 +511,26 @@ const BlogPostForm = () => {
                     className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
                     placeholder="https://example.com/image.jpg"
                   />
+                </div>
+              )}
+
+              {/* Image Fit Option */}
+              {imagePreview && (
+                <div className="mt-4">
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Image Fit
+                  </label>
+                  <select
+                    value={formData.image_fit}
+                    onChange={(e) => setFormData({ ...formData, image_fit: e.target.value })}
+                    className="w-full px-4 py-2 bg-gray-900 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  >
+                    <option value="cover">Cover (fill container, may crop)</option>
+                    <option value="contain">Contain (show full image, may have gaps)</option>
+                    <option value="fill">Fill (stretch to fill)</option>
+                    <option value="none">None (original size)</option>
+                    <option value="scale-down">Scale Down (smaller of contain or none)</option>
+                  </select>
                 </div>
               )}
             </div>

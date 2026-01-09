@@ -42,7 +42,7 @@ const Blog = () => {
       // Fetch only published posts from Supabase
       const { data, error } = await supabase
         .from('blog_posts')
-        .select('id, slug, title, excerpt, author, category, image, published_at, created_at')
+        .select('id, slug, title, excerpt, author, category, image, image_position, image_fit, published_at, created_at')
         .eq('published', true)
         .order('published_at', { ascending: false, nullsFirst: false })
         .limit(50)
@@ -65,6 +65,8 @@ const Blog = () => {
           created_at: post.published_at || post.created_at,
           category: post.category,
           image: post.image,
+          image_position: post.image_position || 'center',
+          image_fit: post.image_fit || 'cover',
         }))
         setPosts(mappedPosts)
       } else {
