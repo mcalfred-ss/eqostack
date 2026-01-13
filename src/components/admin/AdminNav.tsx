@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
-import { LayoutDashboard, FileText, Mail, LogOut, Menu, X } from 'lucide-react'
+import { LayoutDashboard, FileText, Mail, LogOut, Menu, X, Package } from 'lucide-react'
 import { useState } from 'react'
 import { auth } from '../../lib/auth'
 
@@ -19,6 +19,7 @@ const AdminNav = () => {
   const navItems = [
     { path: '/admin', label: 'Dashboard', icon: LayoutDashboard },
     { path: '/admin/blog', label: 'Blog Posts', icon: FileText },
+    { path: '/admin/projects', label: 'Projects', icon: Package },
     { path: '/admin/contacts', label: 'Contacts', icon: Mail },
   ]
 

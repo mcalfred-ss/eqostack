@@ -12,6 +12,7 @@ import {
   Settings,
   TrendingUp,
   AlertCircle,
+  AppWindow,
 } from 'lucide-react'
 
 const Dashboard = () => {
@@ -20,6 +21,7 @@ const Dashboard = () => {
     contactSubmissions: 0,
     jobPositions: 0,
     products: 0,
+    projects: 0,
     unreadContacts: 0,
   })
   const [loading, setLoading] = useState(true)
@@ -56,11 +58,17 @@ const Dashboard = () => {
         .from('products')
         .select('*', { count: 'exact', head: true })
 
+      // Fetch projects
+      const { count: projectCount } = await supabase
+        .from('projects')
+        .select('*', { count: 'exact', head: true })
+
       setStats({
         blogPosts: blogCount || 0,
         contactSubmissions: contactCount || 0,
         jobPositions: jobCount || 0,
         products: productCount || 0,
+        projects: projectCount || 0,
         unreadContacts: unreadCount || 0,
       })
     } catch (error) {
@@ -100,6 +108,13 @@ const Dashboard = () => {
       icon: Package,
       color: 'from-orange-500 to-orange-600',
       link: '/admin/products',
+    },
+    {
+      title: 'Projects',
+      value: stats.projects,
+      icon: AppWindow,
+      color: 'from-indigo-500 to-indigo-600',
+      link: '/admin/projects',
     },
   ]
 

@@ -123,7 +123,7 @@ const Home = () => {
                 inline-flex items-center justify-center
                 min-h-[48px] active:scale-95"
               >
-                Explore Product
+                Explore Projects
                 <ArrowRight className="ml-2" size={18} />
               </Link>
 
@@ -236,7 +236,7 @@ const Home = () => {
               to="/products"
               className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white/10 transition"
             >
-              View Products
+              View Projects
             </Link>
           </div>
         </div>

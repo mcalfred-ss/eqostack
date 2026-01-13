@@ -14,11 +14,11 @@
 
 INSERT INTO admin_users (id, email, full_name, role)
 VALUES (
-  'USER_UUID_HERE',  -- Replace with the UUID from Authentication → Users
-  'your-email@example.com',  -- Replace with the user's email
-  'Your Name',  -- Optional: Replace with admin's name
+  'ad033a92-7db4-46d4-b2bc-33d7e9a21fbd',  -- Replace with the UUID from Authentication → Users
+  'eqostack@gmail.com',  -- Replace with the user's email
+  'Eqostack Admin',  -- Optional: Replace with admin's name
   'admin'  -- Role: 'admin' or 'editor'
 );
 
 -- Verify the admin was created
-SELECT * FROM admin_users WHERE email = 'your-email@example.com';
+SELECT * FROM admin_users WHERE email = 'eqostack@gmail.com';

@@ -6,6 +6,7 @@ import Products from './pages/Products'
 import About from './pages/About'
 import Blog from './pages/Blog'
 import BlogPostDetail from './pages/BlogPostDetail'
+import ProjectDetail from './pages/ProjectDetail'
 import Contact from './pages/Contact'
 import Careers from './pages/Careers'
 import AdminLogin from './pages/admin/Login'
@@ -13,6 +14,8 @@ import AdminDashboard from './pages/admin/Dashboard'
 import BlogPosts from './pages/admin/BlogPosts'
 import BlogPostForm from './pages/admin/BlogPostForm'
 import Contacts from './pages/admin/Contacts'
+import Projects from './pages/admin/Projects'
+import ProjectForm from './pages/admin/ProjectForm'
 
 function App() {
   return (
@@ -24,6 +27,7 @@ function App() {
         <Route path="/about" element={<Layout><About /></Layout>} />
         <Route path="/blog" element={<Layout><Blog /></Layout>} />
         <Route path="/blog/:slug" element={<Layout><BlogPostDetail /></Layout>} />
+        <Route path="/projects/:id" element={<Layout><ProjectDetail /></Layout>} />
         <Route path="/contact" element={<Layout><Contact /></Layout>} />
         <Route path="/careers" element={<Layout><Careers /></Layout>} />
         
@@ -66,6 +70,30 @@ function App() {
           element={
             <ProtectedRoute>
               <Contacts />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/projects"
+          element={
+            <ProtectedRoute>
+              <Projects />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/projects/new"
+          element={
+            <ProtectedRoute>
+              <ProjectForm />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/projects/:id/edit"
+          element={
+            <ProtectedRoute>
+              <ProjectForm />
             </ProtectedRoute>
           }
         />

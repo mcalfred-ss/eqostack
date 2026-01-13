@@ -1,24 +1,21 @@
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { ProductCard } from '../components/cards'
+import { supabase } from '../lib/supabase'
 import {
-  Cloud,
-  Database,
-  Smartphone,
-  Shield,
-  Zap,
-  Globe,
   Code,
   BarChart,
   LucideIcon,
 } from 'lucide-react'
 
-interface Product {
-  icon: LucideIcon
+interface Project {
+  id: string
+  image?: string
   title: string
   description: string
-  features: string[]
-  color: string
+  variants?: string[]
+  downloadUrl?: string
 }
 
 interface EcosystemItem {
@@ -28,56 +25,43 @@ interface EcosystemItem {
 }
 
 const Products = () => {
-  const products: Product[] = [
-    {
-      icon: Cloud,
-      title: 'Cloud Infrastructure',
-      description:
-        'Scalable cloud solutions designed for African businesses. Deploy and scale with confidence.',
-      features: ['99.9% Uptime', 'Auto-scaling', 'Multi-region', '24/7 Support'],
-      color: 'from-blue-500 to-blue-600',
-    },
-    {
-      icon: Database,
-      title: 'Data Analytics Platform',
-      description:
-        'Transform your data into actionable insights with our powerful analytics platform.',
-      features: ['Real-time Analytics', 'AI-Powered', 'Custom Dashboards', 'API Access'],
-      color: 'from-purple-500 to-purple-600',
-    },
-    {
-      icon: Smartphone,
-      title: 'Mobile Solutions',
-      description:
-        'Native and cross-platform mobile apps that deliver exceptional user experiences.',
-      features: ['iOS & Android', 'Offline Support', 'Push Notifications', 'App Store Ready'],
-      color: 'from-green-500 to-green-600',
-    },
-    {
-      icon: Shield,
-      title: 'Security Suite',
-      description:
-        'Enterprise-grade security solutions to protect your digital assets and data.',
-      features: ['End-to-End Encryption', 'DDoS Protection', 'Compliance Ready', 'Audit Logs'],
-      color: 'from-red-500 to-red-600',
-    },
-    {
-      icon: Zap,
-      title: 'Payment Gateway',
-      description:
-        'Seamless payment processing for African markets with support for local payment methods.',
-      features: ['Multi-currency', 'Mobile Money', 'Card Payments', 'Instant Settlements'],
-      color: 'from-yellow-500 to-yellow-600',
-    },
-    {
-      icon: Globe,
-      title: 'API Platform',
-      description:
-        'Comprehensive API management platform for building and scaling your integrations.',
-      features: ['REST & GraphQL', 'Rate Limiting', 'Documentation', 'Developer Portal'],
-      color: 'from-indigo-500 to-indigo-600',
-    },
-  ]
+  const [projects, setProjects] = useState<Project[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetchProjects()
+  }, [])
+
+  const fetchProjects = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('projects')
+        .select('*')
+        .eq('published', true)
+        .order('order_index', { ascending: true })
+        .order('created_at', { ascending: false })
+
+      if (error) throw error
+
+      // Transform database data to component format
+      const transformedProjects: Project[] = (data || []).map((project) => ({
+        id: project.id,
+        image: project.image || undefined,
+        title: project.title,
+        description: project.description,
+        variants: project.variants || [],
+        downloadUrl: project.download_url || undefined,
+      }))
+
+      setProjects(transformedProjects)
+    } catch (error) {
+      console.error('Error fetching projects:', error)
+      // Fallback to empty array on error
+      setProjects([])
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const ecosystem: EcosystemItem[] = [
     {
@@ -103,32 +87,44 @@ const Products = () => {
             className="text-center max-w-3xl mx-auto"
           >
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6 px-4">
-              Our <span className="text-primary-400">Product Ecosystem</span>
+              Our <span className="text-primary-400">Projects</span>
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-gray-300 px-4">
-              Comprehensive technology solutions designed to empower businesses
-              across Africa and beyond.
+              Explore the apps and platforms we've developed. Each project represents our commitment
+              to building solutions that make a difference.
             </p>
           </motion.div>
         </div>
       </section>
 
-      {/* Products Grid */}
+      {/* Projects Grid */}
       <section className="section-padding bg-gray-900">
         <div className="container-custom">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
-            {products.map((product, index) => (
-              <ProductCard
-                key={product.title}
-                icon={product.icon}
-                title={product.title}
-                description={product.description}
-                features={product.features}
-                color={product.color}
-                index={index}
-              />
-            ))}
-          </div>
+          {loading ? (
+            <div className="text-center py-12">
+              <div className="text-gray-600">Loading projects...</div>
+            </div>
+          ) : projects.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-gray-600 mb-4">No projects available at the moment.</p>
+              <p className="text-gray-500 text-sm">Check back soon for new projects!</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
+              {projects.map((project, index) => (
+                <ProductCard
+                  key={project.id}
+                  id={project.id}
+                  image={project.image}
+                  title={project.title}
+                  description={project.description}
+                  variants={project.variants}
+                  downloadUrl={project.downloadUrl}
+                  index={index}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
@@ -182,11 +178,10 @@ const Products = () => {
             viewport={{ once: true }}
           >
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4 sm:mb-6 px-4">
-              Ready to Get Started?
+              Have a Project in Mind?
             </h2>
             <p className="text-base sm:text-lg md:text-xl text-primary-100 mb-6 sm:mb-8 px-4">
-              Contact us to learn more about our products and how they can help
-              your business.
+              Let's work together to bring your ideas to life. Contact us to discuss your next project.
             </p>
             <Link
               to="/contact"
